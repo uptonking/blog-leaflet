@@ -22,6 +22,31 @@ body {
 /* Custom page CSS
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
+.title1{
+    padding: .5rem;
+}
+.album {
+    /*min-height: 50rem; !* Can be removed; just added for demo purposes *!*/
+    padding-top: 1rem;
+    padding-bottom: 0rem;
+    /*background-color: #f7f7f7;*/
+}
+
+.card {
+    float: left;
+    width: 33.333%;
+    padding: .25rem;
+    margin-bottom: 0.25rem;
+    border: 0;
+}
+
+.card > img {
+    margin-bottom: .75rem;
+}
+
+.card-text {
+    font-size: 85%;
+}
 
 body > .container {
     padding: 60px 15px 0;
@@ -35,3 +60,5 @@ body > .container {
 code {
     font-size: 80%;
 }
+
+
