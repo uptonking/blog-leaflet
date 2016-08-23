@@ -66,6 +66,11 @@
             font-weight: bold;
             font-size: 13px;
         }
+
+        /*给图形加边线*/
+        /*.leaflet-zoom-hide{*/
+        /*stroke: white;*/
+        /*}*/
     </style>
 </head>
 <body>
@@ -73,32 +78,26 @@
 <div id="map"></div>
 
 <script type="text/javascript">
-    var mapboxTiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
-        attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-    });
-
+    //初始化底图图层变量
+    var mapboxTiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+    );
+    //初始化地图底图
     var map = L.map('map')
             .addLayer(mapboxTiles)
-            .setView([40.72332345541449, -73.99], 12);
-
-    // we will be appending the SVG to the Leaflet map pane
-    // g (group) element will be inside the svg
+            .setView([40.7233, -73.99], 14);
+    // we will be appending the SVG to the Leaflet map pane, g (group) element will be inside the svg
     var svg = d3.select(map.getPanes().overlayPane).append("svg");
 
-    // if you don't include the leaflet-zoom-hide when a
-    // user zooms in or out you will still see the phantom
-    // original SVG
-    //    var g = svg.append("g").attr("class", "leaflet-zoom-hide");
+    // if you don't include the leaflet-zoom-hide when a user zooms in or out,
+    // you will still see the phantom original SVG
+    // var g = svg.append("g").attr("class", "leaflet-zoom-hide");
     var g = svg.append("g");
 
-
-    //read in the GeoJSON. This function is asynchronous so
-    // anything that needs the json file should be within
-    //    d3.json("https://gist.githubusercontent.com/zross/6a31f4ef9e778d94c204/raw/3d9b6a2825e4961f38bafc657ef1e8f611512e7b/points.geojson", function(collection) {
-    d3.json("../../res/data/points.geojson", function (collection) {
+    // read the GeoJSON. This function is asynchronous. So, anything that needs the json file should be within
+    // d3.json("https://gist.githubusercontent.com/zross/6a31f4ef9e778d94c204/raw/3d9b6a2825e4961f38bafc657ef1e8f611512e7b/points.geojson", function(collection) {
+    d3.json("../../res/data/points.json", function (collection) {
 //        console.log(collection);
-        // this is not needed right now, but for future we may need
-        // to implement some filtering. This uses the d3 filter function
+        // this is not needed right now, but for future we may need to implement some filtering. This uses the d3 filter function
         // featuresdata is an array of point objects
 
         var featuresdata = collection.features.filter(function (d) {
@@ -108,7 +107,6 @@
         //stream transform. transforms geometry before passing it to
         // listener. Can be used in conjunction with d3.geo.path
         // to implement the transform.
-
         var transform = d3.geo.transform({
             point: projectPoint
         });
@@ -305,9 +303,10 @@
     // similar to projectPoint, this function converts lat/long to svg coordinates except that
     // it accepts a point from our GeoJSON
     function applyLatLngToLayer(d) {
-        var y = d.geometry.coordinates[1]
-        var x = d.geometry.coordinates[0]
-        return map.latLngToLayerPoint(new L.LatLng(y, x))
+        var y = d.geometry.coordinates[1];
+        var x = d.geometry.coordinates[0];
+        //LatLngToLayerPoint is used to get coordinates for the layer's new position
+        return map.latLngToLayerPoint(new L.LatLng(y, x));
     }
 </script>
 </body>
