@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>svg circle</title>
+    <style type="text/css">
+       /*#outer2{*/
+           /*left:100px;*/
+           /*top:100px;*/
+       /*}*/
+       #outer1{
+           position: relative;
+           left:50px;
+       }
+        #outer2{
+            position: relative;
+            left:150px;
+        }
+    </style>
+</head>
+<body>
+<svg id="outer1" width="300" height="300">
+    <svg id="outer2" >
+        <circle r="100" cx="100" cy="100"></circle>
+    </svg>
+</svg>
+
+</body>
+</html>
