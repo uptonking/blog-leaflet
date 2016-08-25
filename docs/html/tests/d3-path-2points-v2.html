@@ -199,8 +199,8 @@
                 topLeft = bounds[0],
                 bottomRight = bounds[1];
 
-        console.log(topLeft);
-        console.log(bottomRight);
+//        console.log(topLeft);
+//        console.log(bottomRight);
 
 
         text.attr("transform",
@@ -227,7 +227,7 @@
                 .style("top", topLeft[1] - 50 + "px");
 
 
-        linePath.attr("d", toLine)
+        linePath.attr("d", toLine);
 
         g.attr("transform", "translate(" + (-topLeft[0] + 50) + "," + (-topLeft[1] + 50) + ")");
     } // end reset
