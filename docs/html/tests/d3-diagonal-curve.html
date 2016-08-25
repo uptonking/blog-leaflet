@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
+    <style type="text/css">
+        /*当前点*/
+        .travelMarker {
+            fill: yellow;
+            opacity: 0.7;
+        }
+
+    </style>
+</head>
+
+<body>
+<svg width=800 height=480></svg>
+</body>
+<script type="text/javascript">
+
+    var curveData = [{x: 100, y: 40}, {x: 700, y: 440}];
+
+    var edge = d3.select("svg").append('g');
+
+    var diagonal = d3.svg.diagonal()
+            .source(function (d) {
+                return {"x": d[0].y, "y": d[0].x};
+            })
+            .target(function (d) {
+                return {"x": d[1].y, "y": d[1].x};
+            })
+            .projection(function (d) {
+                return [d.y, d.x];
+            });
+
+    // 运动点
+    var marker = edge.append("circle")
+            .attr("r", 10)
+            .attr("id", "marker")
+            .attr("class", "travelMarker");
+
+   var linePath = edge.datum(curveData)
+            .append("path")
+            .attr("class", "link")
+            .attr("d", diagonal)
+            .attr("stroke", "#444")
+            .attr("stroke-width", 2)
+            .attr("fill", "none");
+
+    transition();
+
+    function transition() {
+        //已走路线
+        linePath.transition()
+                .duration(2500)
+                .attrTween("stroke-dasharray", tweenDash)
+                .each("end", function () {
+                    d3.select(this).call(transition);// infinite loop
+                });
+    } //end transition
+
+    // this function feeds the attrTween operator above with the stroke and dash lengths
+    function tweenDash() {
+
+        return function (t) {
+//                console.log(linePath.node());
+
+            var l = linePath.node().getTotalLength();
+
+            interpolate = d3.interpolateString("0," + l, l + "," + l);
+
+            var marker = d3.select("#marker");
+
+            var p = linePath.node().getPointAtLength(t * l);
+
+            //Move the marker to that point
+            marker.attr("transform", "translate(" + p.x + "," + p.y + ")");
+
+            return interpolate(t);
+        }
+    } //end tweenDash
+
+
+</script>
+</html>
