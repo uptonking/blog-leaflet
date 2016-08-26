@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #xS{
+            background: #fafafa;
+        }
+        #yS{
+            
+        }
+        #cS{
+            
+        }
+    </style>
+</head>
+<body>
+<svg x="0" y="0" width="500" height="500">
+    <svg id="xS" x="0" y="0" width="400" height="30" stroke="black">
+        <g>
+            <path d="M 10 10 L 400 10"/>
+            <circle cx="80" cy="10" r="2" fill="red"/>
+            <circle cx="230" cy="10" r="2" fill="red"/>
+        </g>
+    </svg>
+
+    <svg id="yS" x="0" y="0" width="30" height="400" stroke="black">
+        <g>
+            <path d="M 10 10 L 10 400"/>
+            <circle cx="10" cy="80" r="2" fill="red"/>
+            <!--<text x="10" y="18">80</text>-->
+            <circle cx="10" cy="230" r="2" fill="red"/>
+            <!--<text x="230" y="18">230</text>-->
+        </g>
+    </svg>
+
+    <svg id="cS" x="0" y="0" width="325px" height="325px">
+        <path d="M80 80
+           A 45 45, 0, 0, 0, 125 125
+           L 125 80 Z" fill="green"/>
+        <path d="M230 80
+           A 45 45, 0, 1, 0, 275 125
+           L 275 80 Z" fill="red"/>
+        <path d="M80 230
+           A 45 45, 0, 0, 1, 125 275
+           L 125 230 Z" fill="purple"/>
+        <path d="M230 230
+           A 45 45, 0, 1, 1, 275 275
+           L 275 230 Z" fill="blue"/>
+    </svg>
+
+</svg>
+
+
+</body>
+</html>

@@ -58,25 +58,25 @@
             .scale(y)
             .orient("left");
 
-    //    var line = d3.svg.line()
-    //            .interpolate(function (points) {
-    //                return points.join("A 1,1 0 0 1 ");
-    //            }) // custom interpolator
-    //            .x(function (d) {
-    //                return x(d.x);
-    //            })
-    //            .y(function (d) {
-    //                return y(d.y);
-    //            });
+        var line = d3.svg.line()
+                .interpolate(function (points) {
+                    return points.join("A 1,1 0 0 1 ");
+                }) // custom interpolator
+                .x(function (d) {
+                    return x(d.x);
+                })
+                .y(function (d) {
+                    return y(d.y);
+                });
 
-    var line = d3.svg.line()
-            .interpolate('cardinal') // custom interpolator
-            .x(function (d) {
-                return x(d.x);
-            })
-            .y(function (d) {
-                return y(d.y);
-            });
+//    var line = d3.svg.line()
+//            .interpolate('cardinal') // custom interpolator
+//            .x(function (d) {
+//                return x(d.x);
+//            })
+//            .y(function (d) {
+//                return y(d.y);
+//            });
 
 
     var svg = d3.select("body").append("svg")

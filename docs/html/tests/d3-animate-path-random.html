@@ -2,19 +2,15 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <style type="text/css">
+    <title>测试</title>
+    <style>
         #line {
             width: 700px;
-            margin: 20px 0;
             height: 300px;
-            background: #eee;
+            background: #fafafa;
         }
+    </style>
 
-        button {
-            margin: 20px 0 0 20px;
-        }
-
-        ​</style>
 </head>
 <body>
 <div id="line"></div>
@@ -35,51 +31,76 @@
     //    })
     //    console.log(data);
 
-    var data = [1, 21, 30, 41, 58, 60, 79, 85, 95, 100, 110];
+//    var data = [1, 21, 30, 41, 58, 60, 79, 85, 95, 100, 110].reverse();
+    var data= [ 21,  110];
 
-    var x = d3.scale.linear().domain([0, 10]).range([0, 700]);
-    var y = d3.scale.linear().domain([0, 120]).range([10, 290]);
+    var x = d3.scale.linear().domain([0, 20]).range([0, 700]);
+    var y = d3.scale.linear().domain([0, 120]).range([290,10]);
 
+
+
+    //自定义弧型插值
     var line = d3.svg.line()
-            .interpolate("cardinal")
+            .interpolate(function (points) {
+                return points.join("A 600,600 0 0 1 ");
+            })
             .x(function (d, i) {
-                return x(i);
+                return x(i+5);
             })
             .y(function (d) {
                 return y(d);
-            })
+            });
 
-//    console.log(line);
+    //自定义线性插值
+//    var line = d3.svg.line()
+//            .interpolate(function interpolateLinear(points) {
+//                return points.join("L");
+//            })
+//            .x(function (d, i) {
+//                return x(i+1);
+//            })
+//            .y(function (d) {
+//                return y(d);
+//            });
 
-//    var path = svg.append("path")
-//            .attr("d", line(data))
-//            .attr("stroke", "steelblue")
-//            .attr("stroke-width", "2")
-//            .attr("fill", "none");
+//    var line = d3.svg.line()
+//            .interpolate("linear")
+//            .x(function (d, i) {
+//                return x(i+1);
+//            })
+//            .y(function (d) {
+//                return y(d);
+//            });
+
+
+    //    var path = svg.append("path")
+    //            .attr("d", line(data))
+    //            .attr("stroke", "steelblue")
+    //            .attr("stroke-width", "2")
+    //            .attr("fill", "none");
 
     var path = svg.append("path")
-            .data(data)
             .attr("stroke", "steelblue")
             .attr("stroke-width", "2")
             .attr("fill", "none");
 
-    path.attr("d", line);
+    path.attr("d", line(data));
 
     var totalLength = path.node().getTotalLength();
 
     path.attr("stroke-dasharray", totalLength + " " + totalLength)
             .attr("stroke-dashoffset", totalLength)
             .transition()
-            .duration(2000)
+            .duration(500)
             .ease("linear")
             .attr("stroke-dashoffset", 0);
 
-    svg.on("click", function () {
-        path.transition()
-                .duration(2000)
-                .ease("linear")
-                .attr("stroke-dashoffset", totalLength);
-    })
+//    svg.on("click", function () {
+//        path.transition()
+//                .duration(1000)
+//                .ease("linear")
+//                .attr("stroke-dashoffset", totalLength);
+//    })
 
 
 </script>

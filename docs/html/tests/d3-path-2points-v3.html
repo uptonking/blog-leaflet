@@ -74,12 +74,27 @@
 <div id="map"></div>
 
 <script type="text/javascript">
+
+    var globals = {};
+    globals.namespace = function (str) {
+        var arr = str.split("."), o = globals;
+        for (var i = (arr[0] == "globals") ? 1 : 0; i < arr.length; i++) {
+            o[arr[i]] = o[arr[i]] || {};
+            o = o[arr[i]];
+        }
+    }
+    globals.namespace("CLASS.PER");
+    globals.CLASS.PER.name = "lefeier";
+    console.log('GLOBAL : ' + globals);
+    alert(GLOBAL.CLASS.PER.name);
+
+
     var mapboxTiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png');
     var map = L.map('map').addLayer(mapboxTiles).setView([30.527, 114.360], 14);
     var svg = d3.select(map.getPanes().overlayPane).append("svg");
     var g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
-    var collection ={
+    var collection = {
         "type": "FeatureCollection",
         "crs": {
             "type": "name",
@@ -91,8 +106,8 @@
             {
                 "type": "Feature",
                 "properties": {
-                    "latitude": 30.517,
-                    "longitude": 114.280,
+                    "latitude": 30.527036,
+                    "longitude": 114.360477,
                     "time": 1,
                     "id": "route1",
                     "name": "Gimme"
@@ -100,8 +115,8 @@
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
-                        114.315,
-                        30.517
+                        114.360477,
+                        30.527036
                     ]
                 }
             },
@@ -109,8 +124,8 @@
             {
                 "type": "Feature",
                 "properties": {
-                    "latitude": 30.625,
-                    "longitude": 114.450,
+                    "latitude": 30.503134,
+                    "longitude": 114.399454,
                     "time": 16,
                     "id": "route1",
                     "name": "Along route"
@@ -118,8 +133,8 @@
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
-                        114.400,
-                        30.5311
+                        114.399454,
+                        30.503134
                     ]
                 }
             }
@@ -135,8 +150,18 @@
     var d3path = d3.geo.path().projection(transform);
 
     //点构线，未显示
+    //    var toLine = d3.svg.line()
+    //            .interpolate("cardinal")
+    //            .x(function (d) {
+    //                return applyLatLngToLayer(d).x;
+    //            })
+    //            .y(function (d) {
+    //                return applyLatLngToLayer(d).y;
+    //            });
     var toLine = d3.svg.line()
-            .interpolate("cardinal")
+            .interpolate(function (points) {
+                return points.join("A 300,300 0 0 1 ");
+            })
             .x(function (d) {
                 return applyLatLngToLayer(d).x;
             })
@@ -195,8 +220,6 @@
                 topLeft = bounds[0],
                 bottomRight = bounds[1];
 
-
-
         text.attr("transform",
                 function (d) {
                     return "translate(" +
@@ -213,7 +236,6 @@
                 });
 
 
-
         // Setting the size and location of the overall SVG container
         svg.attr("width", bottomRight[0] - topLeft[0] + 100)
                 .attr("height", bottomRight[1] - topLeft[1] + 100)
@@ -223,40 +245,45 @@
 
         linePath.attr("d", toLine);
 
+        var totalLength = linePath.node().getTotalLength();
+
+        linePath.attr("stroke-dasharray", totalLength + " " + totalLength)
+                .attr("stroke-dashoffset", totalLength)
+                .transition()
+                .duration(500)
+                .ease("linear")
+                .attr("stroke-dashoffset", 0);
+
         g.attr("transform", "translate(" + (-topLeft[0] + 50) + "," + (-topLeft[1] + 50) + ")");
     } // end reset
 
     //        创建虚线
-    function transition() {
-        //已走路线
-        linePath.transition()
-                .duration(2500)
-                .attrTween("stroke-dasharray", tweenDash)
-                .each("end", function () {
-                    d3.select(this).call(transition);// infinite loop
-                });
-    } //end transition
+    //    function transition() {
+    //        //已走路线
+    //        linePath.transition()
+    //                .duration(2500)
+    //                .attrTween("stroke-dasharray", tweenDash)
+    //                .each("end", function () {
+    //                    d3.select(this).call(transition);// infinite loop
+    //                });
+    //    } //end transition
 
     // this function feeds the attrTween operator above with the stroke and dash lengths
-    function tweenDash() {
-
-        return function (t) {
-//                console.log(linePath.node());
-
-            var l = linePath.node().getTotalLength();
-
-            interpolate = d3.interpolateString("0," + l, l + "," + l);
-
-            var marker = d3.select("#marker");
-
-            var p = linePath.node().getPointAtLength(t * l);
-
-            //Move the marker to that point
-            marker.attr("transform", "translate(" + p.x + "," + p.y + ")");
-
-            return interpolate(t);
-        }
-    } //end tweenDash
+    //    function tweenDash() {
+    //
+    //        return function (t) {
+    ////                console.log(linePath.node());
+    //
+    //            var l = linePath.node().getTotalLength();
+    //            interpolate = d3.interpolateString("0," + l, l + "," + l);
+    //            var p = linePath.node().getPointAtLength(t * l);
+    //
+    //            var marker = d3.select("#marker");
+    //            marker.attr("transform", "translate(" + p.x + "," + p.y + ")");
+    //
+    //            return interpolate(t);
+    //        }
+    //    } //end tweenDash
 
     //Use Leaflet to implement a D3 geometric transformation. The latLngToLayerPoint is a Leaflet conversion method:
     //Returns the map layer point that corresponds to the given geographical coordinates
