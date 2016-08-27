@@ -14,16 +14,20 @@
             width: 100%;
             /*background-color: #00c5ff;*/
         }
+
         body {
             margin: 0;
         }
+
         #map {
             width: 100%;
             height: 75%;
         }
+
         svg {
             position: relative;
         }
+
         path {
             /*fill: yellow;*/
             /*stroke: red;*/
@@ -85,13 +89,13 @@
     // read the GeoJSON. This function is asynchronous. So, anything that needs the json file should be within
     // d3.json("https://gist.githubusercontent.com/zross/6a31f4ef9e778d94c204/raw/3d9b6a2825e4961f38bafc657ef1e8f611512e7b/points.geojson", function(collection) {
     d3.json("../../res/data/points2.json", function (collection) {
-        console.log(collection);
+//        console.log(collection);
         // this is not needed right now, but for future we may need to implement some filtering. This uses the d3 filter function
         // featuresdata is an array of point objects
 
-//        var featuresdata = collection.features.filter(function (d) {
-//            return d.properties.id == "route1"
-//        });
+//var featuresdata = collection.features.filter(function (d) {
+// return d.properties.id == "route1"
+//});
 
         var featuresdata = collection.features;
         console.log(featuresdata);
