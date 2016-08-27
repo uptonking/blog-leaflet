@@ -63,7 +63,7 @@
                  * @return {Boolean} 真返回true，否则返回undefined
                  */
                 inArray: function (val, arr) {
-                    var  isIn  = false;
+                    var isIn = false;
                     for (var i = 0, l = arr.length; i < l; i++) {
                         if (arr[i] === val) {
                             isIn = true;
@@ -110,7 +110,7 @@
             var marray = MYAPP.namespace("MYAPP.bfun.array");
             var mstring = MYAPP.namespace("MYAPP.bfun.string");
 
-            var arr = ["a", "b","abc"];
+            var arr = ["a", "b", "abc"];
             var str = "   abc  ";
 
             console.log("判断是否为数组：" + marray.isArray(arr));
@@ -120,6 +120,21 @@
     }
 
     MYAPP.test.init();
+
+
+    //另一种命名空间
+    //    var GLOBAL = {};
+    //    GLOBAL.namespace = function(str){
+    //        var arr = str.split("."),o = GLOBAL;
+    //        for(i = (arr[0] == "GLOBAL") ? 1 : 0;i < arr.length; i++){
+    //            o[arr[i]] = o[arr[i]] || {};
+    //            o = o[arr[i]];
+    //        }
+    //    }
+    //    GLOBAL.namespace("CLASS.PER");
+    //    GLOBAL.CLASS.PER.name = "lefeier";
+    //    console.log('GLOBAL : ' + GLOBAL);
+    //    alert(GLOBAL.CLASS.PER.name);
 </script>
 </body>
 </html>

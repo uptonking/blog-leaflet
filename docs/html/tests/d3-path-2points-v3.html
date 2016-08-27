@@ -75,234 +75,273 @@
 
 <script type="text/javascript">
 
-    var globals = {};
-    globals.namespace = function (str) {
-        var arr = str.split("."), o = globals;
-        for (var i = (arr[0] == "globals") ? 1 : 0; i < arr.length; i++) {
-            o[arr[i]] = o[arr[i]] || {};
-            o = o[arr[i]];
+    var MYAPP = MYAPP || {};
+    MYAPP.namespace = function (str) {
+        var parts = str.split("."),
+                parent = MYAPP,
+                i = 0,
+                l = 0;
+
+        if (parts[0] === "MYAPP") {
+            parts = parts.slice(1);
         }
+        for (i = 0, l = parts.length; i < l; i++) {
+            if (typeof parent[parts[i]] === "undefined") {
+                parent[parts[i]] = {};
+            }
+            parent = parent[parts[i]];
+        }
+        return parent;
     }
-    globals.namespace("CLASS.PER");
-    globals.CLASS.PER.name = "lefeier";
-    console.log('GLOBAL : ' + globals);
-    alert(GLOBAL.CLASS.PER.name);
 
-
-    var mapboxTiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png');
-    var map = L.map('map').addLayer(mapboxTiles).setView([30.527, 114.360], 14);
-    var svg = d3.select(map.getPanes().overlayPane).append("svg");
-    var g = svg.append("g").attr("class", "leaflet-zoom-hide");
-
-    var collection = {
-        "type": "FeatureCollection",
-        "crs": {
-            "type": "name",
-            "properties": {
-                "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
-            }
-        },
-        "features": [
-            {
-                "type": "Feature",
-                "properties": {
-                    "latitude": 30.527036,
-                    "longitude": 114.360477,
-                    "time": 1,
-                    "id": "route1",
-                    "name": "Gimme"
-                },
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [
-                        114.360477,
-                        30.527036
-                    ]
-                }
-            },
-
-            {
-                "type": "Feature",
-                "properties": {
-                    "latitude": 30.503134,
-                    "longitude": 114.399454,
-                    "time": 16,
-                    "id": "route1",
-                    "name": "Along route"
-                },
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [
-                        114.399454,
-                        30.503134
-                    ]
-                }
-            }
-        ]
+    MYAPP.attrs = {
+        mapSources: {
+            mapbox: "//{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
+            autonavi: "//webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
+            osm: "//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        }
     };
 
-    var featuresdata = collection.features;
+    MYAPP.data = {
+        ipPoints1: {
+            "type": "FeatureCollection",
+            "crs": {
+                "type": "name",
+                "properties": {
+                    "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+                }
+            },
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "time": 1,
+                        "id": "route1",
+                        "name": "Gimme"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            114.360477,
+                            30.527036
+                        ]
+                    }
+                },
 
-    //定义方法：将经纬度转成屏幕地图图层点
-    var transform = d3.geo.transform({
-        point: projectPoint
-    });
-    var d3path = d3.geo.path().projection(transform);
+                {
+                    "type": "Feature",
+                    "properties": {
 
-    //点构线，未显示
-    //    var toLine = d3.svg.line()
-    //            .interpolate("cardinal")
-    //            .x(function (d) {
-    //                return applyLatLngToLayer(d).x;
-    //            })
-    //            .y(function (d) {
-    //                return applyLatLngToLayer(d).y;
-    //            });
-    var toLine = d3.svg.line()
-            .interpolate(function (points) {
-                return points.join("A 300,300 0 0 1 ");
-            })
-            .x(function (d) {
-                return applyLatLngToLayer(d).x;
-            })
-            .y(function (d) {
-                return applyLatLngToLayer(d).y;
+                        "time": 16,
+                        "id": "route1",
+                        "name": "Along route"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            114.399454,
+                            30.503134
+                        ]
+                    }
+                }
+            ]
+        },
+        ipPoints: {
+            "type": "FeatureCollection",
+            "crs": {
+                "type": "name",
+                "properties": {
+                    "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+                }
+            },
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "time": 1,
+                        "id": "route1",
+                        "name": "Gimme"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            114.360477,
+                            30.527036
+                        ]
+                    }
+                },
+
+                {
+                    "type": "Feature",
+                    "properties": {
+
+                        "time": 16,
+                        "id": "route1",
+                        "name": "Along route"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            114.399454,
+                            30.503134
+                        ]
+                    }
+                }
+            ]
+        }
+    };
+
+    MYAPP.mapUrl = {
+        mapOperations: (function () {
+            return {
+                initBasemap: function (mapUrl) {
+                    return L.tileLayer(mapUrl);
+                }
+
+            }
+        })()
+    };
+
+    MYAPP.start = {
+        go: function () {
+            var mMapSources = MYAPP.namespace("MYAPP.attrs.mapSources");
+            var mData = MYAPP.namespace("MYAPP.data");
+            var mMapOperations = MYAPP.namespace("MYAPP.maps.mapOperations");
+
+            var mapboxTiles = L.tileLayer(mMapSources.mapbox);
+            var map = L.map('map').addLayer(mapboxTiles).setView([30.520, 114.360], 9);
+            var svg = d3.select(map.getPanes().overlayPane).append("svg");
+            var g = svg.append("g").attr("class", "leaflet-zoom-hide");
+
+            var collection = mData.ipPoints1;
+
+            var featuresdata = collection.features;
+
+            //定义方法：将经纬度转成屏幕地图图层点
+            var transform = d3.geo.transform({
+                point: projectPoint
             });
+            var d3path = d3.geo.path().projection(transform);
 
-    //原始点，用于reset刷新
-    var ptFeatures = g.selectAll("circle")
-            .data(featuresdata)
-            .enter()
-            .append("circle")
-            .attr("r", 3)
-            .attr("class", "waypoints");
+            var toLine = d3.svg.line()
+                    .interpolate(function (points) {
+                        return points.join("A 30,30 0 0 1 ");
+                    })
+                    .x(function (d) {
+                        return applyLatLngToLayer(d).x;
+                    })
+                    .y(function (d) {
+                        return applyLatLngToLayer(d).y;
+                    });
 
-    //已走路线
-    var linePath = g.selectAll(".lineConnect")
-            .data([featuresdata])
-            .enter()
-            .append("path")
-            .attr("class", "lineConnect");
+            //原始点，用于reset刷新
+//            var ptFeatures = g.selectAll("circle")
+//                    .data(featuresdata)
+//                    .enter()
+//                    .append("circle")
+//                    .attr("r", 3)
+//                    .attr("class", "waypoints");
 
-    // 运动点
-    var marker = g.append("circle")
-            .attr("r", 10)
-            .attr("id", "marker")
-            .attr("class", "travelMarker");
+            //已走路线
+            var linePath = g.selectAll(".lineConnect")
+                    .data([featuresdata])
+                    .enter()
+                    .append("path")
+                    .attr("class", "lineConnect");
 
-    // NOT BEST Practice. Style start & end points.
-    var originANDdestination = [featuresdata[0], featuresdata[1]]
+            // 运动点
+            var marker = g.append("circle")
+                    .attr("r", 10)
+                    .attr("id", "marker")
+                    .attr("class", "travelMarker");
 
-    var text = g.selectAll("text")
-            .data(originANDdestination)
-            .enter()
-            .append("text")
-            .text(function (d) {
-                return d.properties.name
-            })
-            .attr("class", "locnames")
-            .attr("y", function (d) {
-                return 12
-            })
-            .attr("x", function (d) {
-                return 10
-            });
+            // NOT BEST Practice. Style start & end points.
+            var originANDdestination = [featuresdata[0], featuresdata[1]]
 
-    map.on("viewreset", reset);
+//            var text = g.selectAll("text")
+//                    .data(originANDdestination)
+//                    .enter()
+//                    .append("text")
+//                    .text(function (d) {
+//                        return d.properties.name
+//                    })
+//                    .attr("class", "locnames")
+//                    .attr("y", function (d) {
+//                        return 12
+//                    })
+//                    .attr("x", function (d) {
+//                        return 10
+//                    });
 
-    // this puts stuff on the map!
-    reset();
-    transition();
+            map.on("viewreset", reset);
 
-    // Reposition the SVG to cover the features. 注意裁剪
-    function reset() {
-        var bounds = d3path.bounds(collection),
-                topLeft = bounds[0],
-                bottomRight = bounds[1];
+            // this puts stuff on the map!
+            reset();
 
-        text.attr("transform",
-                function (d) {
-                    return "translate(" +
-                            applyLatLngToLayer(d).x + "," +
-                            applyLatLngToLayer(d).y + ")";
-                });
+            // Reposition the SVG to cover the features. 注意裁剪
+            function reset() {
+                var bounds = d3path.bounds(collection),
+                        topLeft = bounds[0],
+                        bottomRight = bounds[1];
 
-
-        ptFeatures.attr("transform",
-                function (d) {
-                    return "translate(" +
-                            applyLatLngToLayer(d).x + "," +
-                            applyLatLngToLayer(d).y + ")";
-                });
-
-
-        // Setting the size and location of the overall SVG container
-        svg.attr("width", bottomRight[0] - topLeft[0] + 100)
-                .attr("height", bottomRight[1] - topLeft[1] + 100)
-                .style("left", topLeft[0] - 50 + "px")
-                .style("top", topLeft[1] - 50 + "px");
+//                text.attr("transform",
+//                        function (d) {
+//                            return "translate(" +
+//                                    applyLatLngToLayer(d).x + "," +
+//                                    applyLatLngToLayer(d).y + ")";
+//                        });
 
 
-        linePath.attr("d", toLine);
+//                ptFeatures.attr("transform",
+//                        function (d) {
+//                            return "translate(" +
+//                                    applyLatLngToLayer(d).x + "," +
+//                                    applyLatLngToLayer(d).y + ")";
+//                        });
 
-        var totalLength = linePath.node().getTotalLength();
 
-        linePath.attr("stroke-dasharray", totalLength + " " + totalLength)
-                .attr("stroke-dashoffset", totalLength)
-                .transition()
-                .duration(500)
-                .ease("linear")
-                .attr("stroke-dashoffset", 0);
+                // Setting the size and location of the overall SVG container
+                svg.attr("width", bottomRight[0] - topLeft[0] + 100)
+                        .attr("height", bottomRight[1] - topLeft[1] + 100)
+                        .style("left", topLeft[0] - 50 + "px")
+                        .style("top", topLeft[1] - 50 + "px");
 
-        g.attr("transform", "translate(" + (-topLeft[0] + 50) + "," + (-topLeft[1] + 50) + ")");
-    } // end reset
 
-    //        创建虚线
-    //    function transition() {
-    //        //已走路线
-    //        linePath.transition()
-    //                .duration(2500)
-    //                .attrTween("stroke-dasharray", tweenDash)
-    //                .each("end", function () {
-    //                    d3.select(this).call(transition);// infinite loop
-    //                });
-    //    } //end transition
+                linePath.attr("d", toLine);
 
-    // this function feeds the attrTween operator above with the stroke and dash lengths
-    //    function tweenDash() {
-    //
-    //        return function (t) {
-    ////                console.log(linePath.node());
-    //
-    //            var l = linePath.node().getTotalLength();
-    //            interpolate = d3.interpolateString("0," + l, l + "," + l);
-    //            var p = linePath.node().getPointAtLength(t * l);
-    //
-    //            var marker = d3.select("#marker");
-    //            marker.attr("transform", "translate(" + p.x + "," + p.y + ")");
-    //
-    //            return interpolate(t);
-    //        }
-    //    } //end tweenDash
+                var totalLength = linePath.node().getTotalLength();
 
-    //Use Leaflet to implement a D3 geometric transformation. The latLngToLayerPoint is a Leaflet conversion method:
-    //Returns the map layer point that corresponds to the given geographical coordinates
-    // (useful for placing overlays on the map).
-    function projectPoint(x, y) {
-        var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-        this.stream.point(point.x, point.y);
-    } //end projectPoint
+                linePath.attr("stroke-dasharray", totalLength + " " + totalLength)
+                        .attr("stroke-dashoffset", totalLength)
+                        .transition()
+                        .duration(500)
+                        .ease("linear")
+                        .attr("stroke-dashoffset", 0);
 
-    // similar to projectPoint, this function converts lat/long to svg coordinates except that
-    // it accepts a point from our GeoJSON
-    function applyLatLngToLayer(d) {
-        //获取纬度
-        var y = d.geometry.coordinates[1];
-        //获取经度
-        var x = d.geometry.coordinates[0];
-        //LatLngToLayerPoint is used to get coordinates for the layer's new position
-        return map.latLngToLayerPoint(new L.LatLng(y, x));
+                g.attr("transform", "translate(" + (-topLeft[0] + 50) + "," + (-topLeft[1] + 50) + ")");
+            } // end reset
+
+            function projectPoint(x, y) {
+                var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+                this.stream.point(point.x, point.y);
+            } //end projectPoint
+
+            function applyLatLngToLayer(d) {
+                //获取纬度
+                var y = d.geometry.coordinates[1];
+                //获取经度
+                var x = d.geometry.coordinates[0];
+                //LatLngToLayerPoint is used to get coordinates for the layer's new position
+                return map.latLngToLayerPoint(new L.LatLng(y, x));
+            }
+
+
+        }
     }
+
+    MYAPP.start.go();
+
+
 </script>
 </body>
 

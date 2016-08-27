@@ -2000,8 +2000,8 @@
      * @projection L.Projection.LonLat
      *
      * Equirectangular, or Plate Carree projection — the most simple projection,
-     * mostly used by GIS enthusiasts. Directly maps `x` as longitude, and `y` as
-     * latitude. Also suitable for flat worlds, e.g. game maps. Used by the
+     * mostly used by GIS enthusiasts. Directly mapUrl `x` as longitude, and `y` as
+     * latitude. Also suitable for flat worlds, e.g. game mapUrl. Used by the
      * `EPSG:3395` and `Simple` CRS.
      */
 
@@ -2024,7 +2024,7 @@
      * @namespace Projection
      * @projection L.Projection.SphericalMercator
      *
-     * Spherical Mercator projection — the most common projection for online maps,
+     * Spherical Mercator projection — the most common projection for online mapUrl,
      * used by almost all free and commercial tile providers. Assumes that Earth is
      * a sphere. Used by the `EPSG:3857` CRS.
      */
@@ -2175,8 +2175,8 @@
      * @namespace CRS
      * @crs L.CRS.Simple
      *
-     * A simple CRS that maps longitude and latitude into `x` and `y` directly.
-     * May be used for maps of flat surfaces (e.g. game maps). Note that the `y`
+     * A simple CRS that mapUrl longitude and latitude into `x` and `y` directly.
+     * May be used for mapUrl of flat surfaces (e.g. game mapUrl). Note that the `y`
      * axis should still be inverted (going from bottom to top). `distance()` returns
      * simple euclidean distance.
      */
@@ -2239,7 +2239,7 @@
      * @namespace CRS
      * @crs L.CRS.EPSG3857
      *
-     * The most common CRS for online maps, used by almost all free and commercial
+     * The most common CRS for online mapUrl, used by almost all free and commercial
      * tile providers. Uses Spherical Mercator projection. Set in by default in
      * Map's `crs` option.
      */
@@ -11976,7 +11976,7 @@
 
             // @option prefix: String = 'Leaflet'
             // The HTML text shown before the attributions. Pass `false` to disable.
-            prefix: '<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>'
+            prefix: '<a href="http://leafletjs.com" title="A JS library for interactive mapUrl">Leaflet</a>'
         },
 
         initialize: function (options) {

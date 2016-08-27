@@ -1455,7 +1455,7 @@ L.CRS = {
 
 
 /*
- * A simple CRS that can be used for flat non-Earth maps like panoramas or game maps.
+ * A simple CRS that can be used for flat non-Earth mapUrl like panoramas or game mapUrl.
  */
 
 L.CRS.Simple = L.extend({}, L.CRS, {
@@ -8091,7 +8091,7 @@ L.control.zoom = function (options) {
 L.Control.Attribution = L.Control.extend({
 	options: {
 		position: 'bottomright',
-		prefix: '<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>'
+		prefix: '<a href="http://leafletjs.com" title="A JS library for interactive mapUrl">Leaflet</a>'
 	},
 
 	initialize: function (options) {
