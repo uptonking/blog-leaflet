@@ -109,77 +109,77 @@
         ]
     };
 
-//    apps.data = {
-//        "hgtPoint": {
-//            "type": "FeatureCollection",
-//            "crs": {
-//                "type": "name",
-//                "properties": {
-//                    "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
-//                }
-//            },
-//            "features": [
-//                {
-//                    "type": "Feature",
-//                    "properties": {
-//                        "time": 16,
-//                        "id": "route1",
-//                        "name": "lhkServerPoint"
-//                    },
-//                    "geometry": {
-//                        "type": "Point",
-//                        "coordinates": [
-//                            114.400,
-//                            30.503
-//                        ]
-//                    }
-//                }
-//            ]
-//        },
-//
-//        "ipPoints1": {
-//            "type": "FeatureCollection",
-//            "crs": {
-//                "type": "name",
-//                "properties": {
-//                    "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
-//                }
-//            },
-//            "features": [
-//                {
-//                    "type": "Feature",
-//                    "properties": {
-//                        "time": 1,
-//                        "id": "route1",
-//                        "name": "p1"
-//                    },
-//                    "geometry": {
-//                        "type": "Point",
-//                        "coordinates": [
-//                            114.360477,
-//                            30.527036
-//                        ]
-//                    }
-//                },
-//                {
-//                    "type": "Feature",
-//                    "properties": {
-//
-//                        "time": 16,
-//                        "id": "route1",
-//                        "name": "p2"
-//                    },
-//                    "geometry": {
-//                        "type": "Point",
-//                        "coordinates": [
-//                            114.420,
-//                            30.520
-//                        ]
-//                    }
-//                }
-//            ]
-//        }
-//    };
+    apps.data = {
+        "hgtPoint": {
+            "type": "FeatureCollection",
+            "crs": {
+                "type": "name",
+                "properties": {
+                    "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+                }
+            },
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "time": 16,
+                        "id": "route1",
+                        "name": "lhkServerPoint"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            114.400,
+                            30.503
+                        ]
+                    }
+                }
+            ]
+        },
+
+        "ipPoints1": {
+            "type": "FeatureCollection",
+            "crs": {
+                "type": "name",
+                "properties": {
+                    "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+                }
+            },
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "time": 1,
+                        "id": "route1",
+                        "name": "p1"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            114.360477,
+                            30.527036
+                        ]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+
+                        "time": 16,
+                        "id": "route1",
+                        "name": "p2"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            114.420,
+                            30.520
+                        ]
+                    }
+                }
+            ]
+        }
+    };
 
     apps.maps = {
         mapOperations: (function () {
@@ -214,7 +214,7 @@
 
     apps.start = {
         init: function () {
-//            var mData1 = apps.namespace("apps.data");
+            var mData = apps.namespace("apps.data");
 
 
             var mapTiles = L.tileLayer(apps.attrs.mapSources[0].mapbox);
@@ -233,10 +233,7 @@
             var svg = apps.namespace("apps.attrs.svg");
             var g = apps.namespace("apps.attrs.g");
 
-//            var rtPoints = apps.data.ipPoints1;
-//            var hgtServerPoint = mData.hgtPoint;
-
-            var dataAll = {
+            var data = {
                 "hgtPoint": {
                     "type": "FeatureCollection",
                     "crs": {
@@ -308,130 +305,115 @@
                 }
             };
 
-//===================================此处出现对象覆盖=======================================
+            var lhkServerPoint = mData.hgtPoint;
+            var ipPoints = mData.ipPoints1;
 
-            console.log(dataAll);
-            console.log(dataAll.ipPoints1);
-            console.log(dataAll.hgtPoint);
-
-            var rtPoints = dataAll.ipPoints1;
-            var lhkServerPoint = dataAll.hgtPoint;
-
-            console.log(rtPoints);
-            console.log(lhkServerPoint);
+//            console.log(lhkServerPoint)
+//            console.log(ipPoints)
 
 
             //把导入的各个坐标点作为起点，把服务器位置作为终点，构建起止点数组
             var startEndArr = [];
-            var rtLength = rtPoints.features.length;
-            for (var i = 0; i < rtLength; i++) {
-                var tempLine = lhkServerPoint;
+            var pLength = ipPoints.features.length;
+            for (var i = 0; i < pLength; i++) {
+                var tempLine = cloneObj(lhkServerPoint);
                 var x1 = lhkServerPoint.features[0];
-                tempLine.features[0] = rtPoints.features[i];
+                tempLine.features[0] = ipPoints.features[i];
                 tempLine.features[1] = x1;
                 startEndArr[i] = tempLine;
             }
+//            console.log(startEndArr);
 
-            console.log(startEndArr);
+//            for (var j = 0; j < pLength; j++) {
 
-//            for (var j = 0; j < rtLength; j++) {
-
-            var collection = startEndArr[1];
-            var featuresdata = collection.features;
-//                console.log(featuresdata);
+                var collection = startEndArr[0];
+                var featuresdata = collection.features;
 
 
-            //定义方法：将经纬度转成屏幕地图图层点
-            var transform = d3.geo.transform({
-                point: apps.maps.general.projectPoint
-            });
-            var d3path = d3.geo.path().projection(transform);
+                //定义方法：将经纬度转成屏幕地图图层点
+                var transform = d3.geo.transform({
+                    point: apps.maps.general.projectPoint
+                });
+                var d3path = d3.geo.path().projection(transform);
 
 
-            var toLine = d3.svg.line()
-                    .interpolate(function (points) {
-                        return points.join("A 30,30 0 0 1 ");
-                    })
-                    .x(function (d) {
-                        return mMaps.general.applyLatLngToLayer(d).x;
-                    })
-                    .y(function (d) {
-                        return mMaps.general.applyLatLngToLayer(d).y;
-                    });
-
-//            目标服务器点，用于reset刷新
-            var ptFeatures = g.selectAll("circle")
-                    .data(lhkServerPoint)
-                    .enter()
-                    .append("circle")
-                    .attr("r", 3)
-                    .attr("class", "waypoints");
-
-            var fLength = mData.ipPoints1.features.length;
-            for (var i = 0; i < fLength; i++) {
-
-
-            }
-
-            //已走路线
-            var linePath = g.selectAll(".lineConnect")
-                    .data([featuresdata])
-                    .enter()
-                    .append("path")
-                    .attr("class", "lineConnect");
-
-            // 运动点
-            var marker = g.append("circle")
-                    .attr("r", 10)
-                    .attr("id", "marker")
-                    .attr("class", "travelMarker");
-
-            // NOT BEST Practice. Style start & end points.
-//            var originANDdestination = [featuresdata[0], featuresdata[1]]
-
-
-            map.on("viewreset", reset);
-
-            // this puts stuff on the map!
-            reset();
-
-            // Reposition the SVG to cover the features. 注意裁剪
-            function reset() {
-                var bounds = d3path.bounds(collection),
-                        topLeft = bounds[0],
-                        bottomRight = bounds[1];
-
-
-                ptFeatures.attr("transform",
-                        function (d) {
-                            return "translate(" +
-                                    mMaps.general.applyLatLngToLayer(d).x + "," +
-                                    mMaps.general.applyLatLngToLayer(d).y + ")";
+                var toLine = d3.svg.line()
+                        .interpolate(function (points) {
+                            return points.join("A 30,30 0 0 1 ");
+                        })
+                        .x(function (d) {
+                            return mMaps.general.applyLatLngToLayer(d).x;
+                        })
+                        .y(function (d) {
+                            return mMaps.general.applyLatLngToLayer(d).y;
                         });
 
+//            目标服务器点，用于reset刷新
+                var ptFeatures = g.selectAll("circle")
+                        .data(lhkServerPoint)
+                        .enter()
+                        .append("circle")
+                        .attr("r", 3)
+                        .attr("class", "waypoints");
 
-                // Setting the size and location of the overall SVG container
-                svg.attr("width", bottomRight[0] - topLeft[0] + 100)
-                        .attr("height", bottomRight[1] - topLeft[1] + 100)
-                        .style("left", topLeft[0] - 50 + "px")
-                        .style("top", topLeft[1] - 50 + "px");
+                //已走路线
+                var linePath = g.selectAll(".lineConnect")
+                        .data([featuresdata])
+                        .enter()
+                        .append("path")
+                        .attr("class", "lineConnect");
+
+                // 运动点
+                var marker = g.append("circle")
+                        .attr("r", 10)
+                        .attr("id", "marker")
+                        .attr("class", "travelMarker");
+
+                // NOT BEST Practice. Style start & end points.
+//            var originANDdestination = [featuresdata[0], featuresdata[1]]
+
+                map.on("viewreset", reset);
+
+                // this puts stuff on the map!
+                reset();
+
+                // Reposition the SVG to cover the features. 注意裁剪
+                function reset() {
+                    var bounds = d3path.bounds(collection),
+                            topLeft = bounds[0],
+                            bottomRight = bounds[1];
 
 
-                linePath.attr("d", toLine);
+                    ptFeatures.attr("transform",
+                            function (d) {
+                                return "translate(" +
+                                        mMaps.general.applyLatLngToLayer(d).x + "," +
+                                        mMaps.general.applyLatLngToLayer(d).y + ")";
+                            });
 
-                var totalLength = linePath.node().getTotalLength();
 
-                linePath.attr("stroke-dasharray", totalLength + " " + totalLength)
-                        .attr("stroke-dashoffset", totalLength)
-                        .transition()
-                        .duration(500)
-                        .ease("linear")
-                        .attr("stroke-dashoffset", 0);
+                    // Setting the size and location of the overall SVG container
+                    svg.attr("width", bottomRight[0] - topLeft[0] + 100)
+                            .attr("height", bottomRight[1] - topLeft[1] + 100)
+                            .style("left", topLeft[0] - 50 + "px")
+                            .style("top", topLeft[1] - 50 + "px");
 
-                g.attr("transform", "translate(" + (-topLeft[0] + 50) + "," + (-topLeft[1] + 50) + ")");
-            } // end reset
 
-        }
+                    linePath.attr("d", toLine);
+
+                    var totalLength = linePath.node().getTotalLength();
+
+                    linePath.attr("stroke-dasharray", totalLength + " " + totalLength)
+                            .attr("stroke-dashoffset", totalLength)
+                            .transition()
+                            .duration(500)
+                            .ease("linear")
+                            .attr("stroke-dashoffset", 0);
+
+                    g.attr("transform", "translate(" + (-topLeft[0] + 50) + "," + (-topLeft[1] + 50) + ")");
+                } // end reset
+
+            }
 
 
 //        }

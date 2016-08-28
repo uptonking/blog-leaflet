@@ -1,4 +1,6 @@
-// 打印对象
+/**
+ * 打印对象
+ */
 function writeObj(obj) {
     var description = "";
     for (var i in obj) {
@@ -7,7 +9,11 @@ function writeObj(obj) {
     }
     alert(description);
 }
-// 对象转字符串
+/**
+ * 对象转字符串
+ * @param o
+ * @returns {*}
+ */
 function obj2string(o) {
     var r = [];
     if (typeof o == "string") {
@@ -31,4 +37,47 @@ function obj2string(o) {
         return r;
     }
     return o.toString();
+}
+/**
+ * 克隆对象
+ * @param obj
+ * @returns {*}
+ */
+function cloneObj(obj)
+{
+    var o,i,j,k;
+    if(typeof(obj)!="object" || obj===null)return obj;
+    if(obj instanceof(Array))
+    {
+        o=[];
+        i=0;j=obj.length;
+        for(;i<j;i++)
+        {
+            if(typeof(obj[i])=="object" && obj[i]!=null)
+            {
+                o[i]=arguments.callee(obj[i]);
+            }
+            else
+            {
+                o[i]=obj[i];
+            }
+        }
+    }
+    else
+    {
+        o={};
+        for(i in obj)
+        {
+            if(typeof(obj[i])=="object" && obj[i]!=null)
+            {
+                o[i]=arguments.callee(obj[i]);
+            }
+            else
+            {
+                o[i]=obj[i];
+            }
+        }
+    }
+
+    return o;
 }

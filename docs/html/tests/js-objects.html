@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>查看点集合对象</h3>
+
+<script>
+    var data = {
+        "hgtPoint": {
+            "type": "FeatureCollection",
+            "crs": {
+                "type": "name",
+                "properties": {
+                    "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+                }
+            },
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "time": 16,
+                        "id": "route1",
+                        "name": "lhkServerPoint"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            114.400,
+                            30.503
+                        ]
+                    }
+                }
+            ]
+        },
+
+        "ipPoints1": {
+            "type": "FeatureCollection",
+            "crs": {
+                "type": "name",
+                "properties": {
+                    "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+                }
+            },
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "time": 1,
+                        "id": "route1",
+                        "name": "p1"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            114.360477,
+                            30.527036
+                        ]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+
+                        "time": 16,
+                        "id": "route1",
+                        "name": "p2"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            114.420,
+                            30.520
+                        ]
+                    }
+                }
+            ]
+        }
+    };
+
+    console.log(data.hgtPoint)
+    console.log(data.ipPoints1)
+
+    var f1 = data.hgtPoint;
+    var f2= data.ipPoints1;
+
+    console.log(f1)
+    console.log(f2)
+
+</script>
+</body>
+</html>
