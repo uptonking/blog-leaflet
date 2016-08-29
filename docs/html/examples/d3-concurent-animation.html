@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../scripts/js/d3-3.5.17.js"></script>
+</head>
+<body>
+
+<script>
+    //Width and height
+    var w = 300;
+    var h = 300;
+    var dataset = [25, 50, 75, 100, 125, 150];
+
+    //Create the SVG here.
+    var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+    //Create a circle
+    var C = svg.selectAll("circle")
+            .data(dataset)
+            .enter()
+            .append("circle");
+
+
+            //Assign attributes to circle
+           C.attr("cx", function (d, i) {
+                return (i * 50) + 50;
+            })
+            .attr("cy", function (d, i) {
+                return (i * 50) + 25;
+            })
+            .attr("r", 20)
+            .attr("fill", function (d) {
+                return "rgb(0, 0, " + (d    ) + ")";
+            });
+
+
+    //Creating a path
+    var L = svg.append("path")
+            .attr("d", "M0,0L0,300L300,300L300,0L0,0")
+            .attr("stroke", "blue")
+            .attr("stroke-width", 2)
+            .attr("fill", "none");
+
+    //Transitions
+    C.transition()
+            .attr("cy", 150)
+            .attr("cx", 150)
+            .duration(2000)
+            .each("end", function () {
+
+                L.transition()
+                        .attr("d", "M100,100L100,200L200,200L200,100L100,100")
+                        .delay(2000)
+                        .duration(1000)
+                        .ease("elastic");
+            });
+
+</script>
+</body>
+</html>
